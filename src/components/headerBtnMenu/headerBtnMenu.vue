@@ -22,8 +22,16 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapActions, mapWritableState } from 'pinia';
-import { useHeaderBtnMenuData } from './headerBtnMenuData';
-import { useRegister } from 'src/pages/registerPage/registerPageData';
+import { useRegister } from 'src/pages/registerPage/registerPage.vue';
+import { defineStore } from 'pinia';
+
+export const useHeaderBtnMenuData = defineStore('headerBtnMenuData', {
+  state: () => ({
+    leftDrawerOpen: false,
+    userName: 'testa',
+    searchType: 'anki',
+  }),
+});
 
 export default defineComponent({
   name: 'headerBtnMenu',

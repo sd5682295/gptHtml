@@ -1,0 +1,29 @@
+<div class="overflow-hidden text-sm items-start">
+  <p class="text-xs text-[#b4bbc4] text-left">2023/3/30 下午9:35:21</p>
+  <div class="flex items-end gap-1 mt-2 flex-row">
+    <div
+      class="text-black text-wrap min-w-[20px] rounded-md px-3 py-2 bg-[#f4f6f8] dark:bg-[#1e1e20]"
+    >
+      <div class="leading-relaxed break-words">
+        <div class="markdown-body">
+          <p>
+            I'm sorry, I need more information or context to understand what you
+            are asking for. Could you please provide more details?
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <button
+        class="mb-2 transition text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-300"
+        :icon="send"
+      ></button
+      ><!----><button
+        class="transition text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-200"
+      >
+      :icon="send"
+        </svg></button
+      ><!---->
+    </div>
+  </div>
+</div>

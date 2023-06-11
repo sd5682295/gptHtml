@@ -1,91 +1,137 @@
 <template>
-  <div class="chat-container">
-    <!-- <div class="chat-header">Chat Room</div> -->
-    <div class="chat-messages">
-      <div class="q-pa-md row justify-center">
-        <div style="width: 100%; max-width: 600px">
-          <q-chat-message
-            v-for="(message, index) in messages"
-            :key="index"
-            :text="message.content"
-            :sent="message.sent"
-            :name="message.author"
-            :avatar="message.avatar"
-          />
-        </div>
-      </div>
-    </div>
-    <div class="chat-form">
-      <el-input v-model="newMessage" placeholder="Type your message"></el-input>
-      <el-button type="primary" @click="sendMessage">Send</el-button>
-    </div>
-  </div>
+  <!-- 页面容器 -->
+  <q-page class="chat-container">
+    <!-- 工具栏组件 -->
+    <tool-bar />
+    <editor-box />
+    <!-- 循环渲染消息列表 -->
+    <message-box />
+    <!-- 页面元素样式设置 -->
+  </q-page>
 </template>
+<script lang="ts">
+import hljs from 'highlight.js';
 
-<script>
 import { mapActions, mapWritableState } from 'pinia';
-import { defineComponent } from 'vue';
-import { useChatPageData } from 'src/pages/chatPage/chatPageData.ts';
-import { useRegister } from 'src/pages/registerPage/registerPageData.ts';
+import { defineComponent, reactive, ref, onBeforeUnmount } from 'vue';
+import { useRegister } from 'src/pages/registerPage/registerPage.vue';
+import { useMainLayoutData } from 'src/layouts/MainLayout.vue';
+
+import toolBar from 'src/pages/chatPage/ToolBar.vue';
+import editorBox from 'src/pages/chatPage/EditorBox.vue';
+import messageBox from 'src/pages/chatPage/MessageBox.vue';
+import { useChatPageData } from './chatData';
+import { useQuasar } from 'quasar';
+
 export default defineComponent({
   name: 'chatPage',
-  computed: {
-    ...mapWritableState(useRegister, ['password', 'userName']),
-    ...mapWritableState(useChatPageData, ['messages', 'newMessage']),
+
+  components: {
+    toolBar,
+    editorBox,
+    messageBox,
+    // headerBtnMenu,
+    // registerPage,
+    // chatPage,
+    // buyPage,
+    // userAdmin,
   },
+  mounted() {
+    this.getSessionMessages();
+    this.$nextTick(() => {
+      this.getSessionMessages();
+      // 解决异步更新视图的问题
+      // const codeBlock = this.$refs.codeBlock as HTMLElement; // 使用类型断言将 $refs.codeBlock 的类型转换为 HTMLElement
+      // hljs.highlightBlock(codeBlock); // 使用 highlight.js 对代码块进行高亮处理
+    });
+  },
+
   methods: {
-    ...mapActions(useRegister, ['onSubmit']),
-    ...mapActions(useChatPageData, ['sendMessage']),
-    // sendMessage() {
-    //   if (this.newMessage !== '') {
-    //     this.messages.push({
-    //       author: 'You',
-    //       content: this.newMessage,
-    //       type: 'user',
-    //     });
-    //     this.newMessage = '';
-    //   }
-    // },
+    // ...mapActions(useRegister, ['onSubmit']),
+    ...mapActions(useChatPageData, ['getSessionMessages', 'sendMessage']),
   },
 });
 </script>
-<style>
+<style scoped>
+.sent-btn {
+  border: 1px solid #2196f3;
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.sent-btn:hover {
+  background-color: #1976d2;
+}
 .chat-container {
   display: flex;
   flex-direction: column;
   height: 90vh;
 }
-.chat-header {
-  background-color: #4267b2;
-  color: white;
-  padding: 10px;
-  font-size: 24px;
-  text-align: center;
+.message-card {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-.chat-message {
+
+.message-card-section {
+  padding: 10px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
-
-  height: 100vh;
-}
-.chat-message .chat-message-content {
-  background-color: #f0f0f0;
-  border-radius: 16px;
-  padding: 10px;
-  margin-left: 10px;
-  max-width: 60%;
-  word-wrap: break-word;
-}
-.chat-form {
-  display: flex;
   align-items: center;
-  padding: 10px;
-  margin-top: auto;
-  background-color: #f0f0f0;
 }
 .chat-form el-input {
   flex: 1;
   margin-right: 10px;
+}
+.message-card,
+.message-card-section {
+  width: 100%;
+}
+.code-block {
+  display: block;
+  font-size: 14px;
+  margin: 16px 0;
+  padding: 0.5rem;
+  overflow: auto;
+  border-radius: 3px;
+  background-color: #f6f8fa;
+  word-wrap: normal;
+  text-align: left;
+}
+
+.code-block pre {
+  margin: 0;
+  border-radius: 0;
+  background-color: inherit;
+  box-shadow: none;
+  white-space: pre-wrap;
+}
+
+.code-block pre code {
+  display: inline;
+  padding: 0;
+  background-color: inherit;
+  word-wrap: normal;
+}
+.message-card-section {
+  overflow-x: auto;
+}
+
+.message-card-section div {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.msg-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+footer {
+  position: relative;
+  /* 其他样式属性 */
+}
+
+editor-box {
+  position: absolute;
+  bottom: 0;
+  /* 其他样式属性 */
 }
 </style>

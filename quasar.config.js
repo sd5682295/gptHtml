@@ -14,6 +14,7 @@
 /* eslint global-require: 0 */
 
 const { configure } = require('quasar/wrappers');
+// const { NodePolyfillPlugin } = require('node-polyfill-webpack-plugin');
 
 module.exports = configure((ctx) => ({
   // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
@@ -50,7 +51,11 @@ module.exports = configure((ctx) => ({
     'roboto-font', // optional, you are not bound to it
     'material-icons', // optional, you are not bound to it
   ],
-
+  // resolve: {
+  //   fallback: {
+  //     path: require.resolve('path-browserify'),
+  //   },
+  // },
   // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
   build: {
     vueRouterMode: 'hash', // available values: 'hash', 'history'
@@ -64,8 +69,8 @@ module.exports = configure((ctx) => ({
     // transpileDependencies: [],
 
     // rtl: true, // https://quasar.dev/options/rtl-support
-    // preloadChunks: true,
-    // showProgress: false,
+    preloadChunks: true,
+    showProgress: true,
     // gzip: true,
     // analyze: true,
 
@@ -97,6 +102,7 @@ module.exports = configure((ctx) => ({
 
   // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-framework
   framework: {
+    plugins: ['Loading'],
     config: {
       screen: {
         bodyClasses: true,
@@ -115,6 +121,7 @@ module.exports = configure((ctx) => ({
 
     // Quasar plugins
     plugins: [],
+    // plugins: [new NodePolyfillPlugin()],
   },
 
   // animations: 'all', // --- includes all animations
